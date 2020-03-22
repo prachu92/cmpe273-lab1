@@ -33,6 +33,8 @@ CREATE TABLE `student_users` (
 LOCK TABLES `student_users` WRITE;
 /*!40000 ALTER TABLE `student_users` DISABLE KEYS */;
 INSERT INTO `student_users` VALUES (1, 'prat','prat@gmail.com','$2a$10$t5D0WvN0pZ7d/xEQ99vmJODBjrRrT5eNeuGuUrl4GlM31ST1KFs5W','SJSU');
+INSERT INTO `student_users` VALUES (2, 'Ronald Weasley','ronald@gmail.com','$2a$10$Z8UnCYl.3jJ2jaLyMYCq1.A73JRxFzE1Asv4uvbeMPdqpnbvDBmR.','University of Hogwarts');
+INSERT INTO `student_users` VALUES (3, 'Draco Malfoy','draco@gmail.com','$2a$10$Z8UnCYl.3jJ2jaLyMYCq1.A73JRxFzE1Asv4uvbeMPdqpnbvDBmR.','Stanford University');
 /*!40000 ALTER TABLE `student_users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -58,6 +60,7 @@ CREATE TABLE `company_users` (
 LOCK TABLES `company_users` WRITE;
 /*!40000 ALTER TABLE `company_users` DISABLE KEYS */;
 INSERT INTO `company_users` VALUES (1, 'nokia','nokia@gmail.com','$2a$10$t5D0WvN0pZ7d/xEQ99vmJODBjrRrT5eNeuGuUrl4GlM31ST1KFs5W','USA');
+INSERT INTO `company_users` VALUES (2, 'Tesla, Inc.','tesla@gmail.com','$2a$10$Z8UnCYl.3jJ2jaLyMYCq1.A73JRxFzE1Asv4uvbeMPdqpnbvDBmR.','USA');
 /*!40000 ALTER TABLE `company_users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -78,6 +81,7 @@ CREATE TABLE `student_profiles` (
   `state` char(20) DEFAULT NULL,
   `country` char(50) DEFAULT NULL,
   `profilePic` varchar(45) DEFAULT NULL,
+  `phoneNo` varchar(11) DEFAULT NULL,
   FOREIGN KEY(`studentID`) REFERENCES student_users(`studentID`)
 );
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -88,7 +92,7 @@ CREATE TABLE `student_profiles` (
 
 LOCK TABLES `student_profiles` WRITE;
 /*!40000 ALTER TABLE `student_profiles` DISABLE KEYS */;
-INSERT INTO `student_profiles` VALUES (1, 'Hi all. ','08-09-1992','Sunnyvale','California','USA','');
+INSERT INTO `student_profiles` VALUES (1, 'Hi all. ','08-09-1992','Sunnyvale','California','USA','',7896544321);
 /*!40000 ALTER TABLE `student_profiles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -103,9 +107,9 @@ CREATE TABLE `student_education` (
   `studentID` int(11) NOT NULL,
   `college` varchar(255) DEFAULT NULL,
   `location` varchar(255) DEFAULT NULL,
-  `degree` char(255) DEFAULT NULL,
-  `major` char(20) DEFAULT NULL,
-  `yop` int(5) DEFAULT NULL,
+  `degree` varchar(255) DEFAULT NULL,
+  `major` varchar(20) DEFAULT NULL,
+  `yop` YEAR DEFAULT NULL,
   `cgpa` float(4) DEFAULT NULL,
   FOREIGN KEY(`studentID`) REFERENCES student_users(`studentID`)
 );
@@ -118,6 +122,8 @@ CREATE TABLE `student_education` (
 LOCK TABLES `student_education` WRITE;
 /*!40000 ALTER TABLE `student_education` DISABLE KEYS */;
 INSERT INTO `student_education` VALUES (1, 'SJSU','Sunnyvale','MS', 'SE', 2020, 3);
+INSERT INTO `student_education` VALUES (2, 'University of Hogwarts','Sunnyvale','MS', 'SE', 2020, 3);
+INSERT INTO `student_education` VALUES (3, 'Stanford University','Sunnyvale','MS', 'EE', 2020, 3);
 /*!40000 ALTER TABLE `student_education` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -227,7 +233,8 @@ CREATE TABLE `events` (
 
 LOCK TABLES `events` WRITE;
 /*!40000 ALTER TABLE `events` DISABLE KEYS */;
-INSERT INTO `events` VALUES (1, 1, 'Nokia Hiring','19:30:10','2020-06-15','Nokia Hiring event for WIFI team','Sunnyvale','');
+INSERT INTO `events` VALUES (1, 1, 'Nokia Hiring','19:30:10','2020-06-15','Nokia Hiring event for WIFI team','Sunnyvale','SE');
+INSERT INTO `events` VALUES (2, 2, 'Python Developer Conference','19:30:00','2020-04-30','Developer conference for python','Sunnyvale','SE');
 /*!40000 ALTER TABLE `events` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -277,7 +284,11 @@ CREATE TABLE `jobs` (
 
 LOCK TABLES `jobs` WRITE;
 /*!40000 ALTER TABLE `jobs` DISABLE KEYS */;
-INSERT INTO `jobs` VALUES (1, 1, 'Nokia AP Developer','BS/MS','WE are looking for engineers','Sunnyvale','email:nokia@gmail.com');
+INSERT INTO `jobs` VALUES (1, 1, 'Nokia AP Developer','internship','WE are looking for developers','Sunnyvale','email:nokia@gmail.com');
+INSERT INTO `jobs` VALUES (1, 2, 'Nokia Software Engineer','internship','WE are looking for engineers','Mountain View','email:nokia@gmail.com');
+INSERT INTO `jobs` VALUES (2, 3, 'Performance Engineering Intern (Internship)','internship','WE are looking for interns to work on self driving','Palo Alto','email:tesla@gmail.com');
+INSERT INTO `jobs` VALUES (2, 4, 'Quality Assurance Engineer (Full Time)','full-time','We are looking for QA engineers to work on self driving','Palo Alto','email:tesla@gmail.com');
+
 /*!40000 ALTER TABLE `jobs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -290,8 +301,8 @@ CREATE TABLE `jobs_applicants` (
   `studentID` int(11) NOT NULL,
   `jobID` int(11) NOT NULL,
   `resumePath` varchar(200) NOT NULL,
-  `applicationDate` date NOT NULL,
-  `applicationStatus` date NOT NULL,
+  `applicationDate` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  `applicationStatus` boolean NOT NULL,
   `contactInfo` varchar(100) DEFAULT NULL,
   FOREIGN KEY(`studentID`) REFERENCES student_users(`studentID`),
   FOREIGN KEY(`jobID`) REFERENCES jobs(`jobID`)
@@ -305,6 +316,7 @@ CREATE TABLE `jobs_applicants` (
 LOCK TABLES `jobs_applicants` WRITE;
 /*!40000 ALTER TABLE `jobs_applicants` DISABLE KEYS */;
 INSERT INTO `jobs_applicants` VALUES ('1','1','/s/d','2020-06-15','accepted','prat@gmail.com');
+INSERT INTO `jobs_applicants` VALUES (2, 3, 'RonaldWeasley.pdf', '2020-06-15', 0, 'prat@gmail.com');
 /*!40000 ALTER TABLE `jobs_applicants` ENABLE KEYS */;
 UNLOCK TABLES;
 

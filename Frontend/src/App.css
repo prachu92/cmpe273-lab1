@@ -22,6 +22,11 @@
 .login-form .form-group {
   margin-bottom:10px;
 }
+
+.login-form .login-form-group{
+  margin-bottom:50px;
+}
+
 .login-form{ text-align:center;}
 .forgot a {
   color: #777777;
@@ -48,3 +53,53 @@
 }
 .back { text-align: left; margin-top:10px;}
 .back a {color: #444444; font-size: 13px;text-decoration: none;}
+
+span.block {
+  display: block;
+  width: 300px;
+  height: 300px;
+  padding-top: 50px;
+  padding-right: 30px;
+  padding-bottom: 50px;
+  padding-left: 80px;
+  border: 0px solid rgb(255, 208, 0);    
+  background-color: #FFF0F5; 
+  float:left;
+}
+
+span.rectblock {
+  display: inline-block;
+  width: 700px;
+  height: 200px;
+  padding-top: 50px;
+  padding-right: 30px;
+  padding-bottom: 50px;
+  padding-left: 80px;
+  border: 0px solid rgb(255, 208, 0);    
+  background-color: #FFF0F5;
+}
+
+span.rectblockselected {
+  display: inline-block;
+  width: 700px;
+  height: 200px;
+  padding-top: 50px;
+  padding-right: 30px;
+  padding-bottom: 50px;
+  padding-left: 80px;
+  border: 0px solid rgb(255, 208, 0);    
+  background-color: rgb(112, 108, 168);
+}
+
+/* Style the search field */
+form.example input[type=text] {
+  padding: 10px;
+  font-size: 17px;
+  border: 1px solid grey;
+  float: left;
+  width: 80%;
+  background: #f1f1f1;
+}
+
+
+

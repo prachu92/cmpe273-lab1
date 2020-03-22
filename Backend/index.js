@@ -1,6 +1,7 @@
 //import the require dependencies
 var express = require('express');
 var app = express();
+var multer = require('multer');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
@@ -34,130 +35,18 @@ app.use(function(req, res, next) {
     next();
   });
 
-  var Users = [{
-      username : "admin",
-      password : "admin"
-  }]
+app.use('/uploads', express.static('uploads'));
 
-  var books = [
-    {"BookID" : "1", "Title" : "Book 1", "Author" : "Author 1"},
-    {"BookID" : "2", "Title" : "Book 2", "Author" : "Author 2"},
-    {"BookID" : "3", "Title" : "Book 3", "Author" : "Author 3"}
-]
+var studentRoutes = require('./src/routes/studentRoutes');
+var loginRoutes = require('./src/routes/loginRoutes');
+var jobRoutes = require('./src/routes/jobRoutes');
+var eventRoutes = require('./src/routes/eventRoutes');
+var basePath = '/handshake';
+app.use(basePath, studentRoutes);
+app.use(basePath, loginRoutes);
+app.use(basePath, jobRoutes);
+app.use(basePath,eventRoutes);
 
-//Route to handle Post Request Call
-app.post('/login',function(req,res){
-    
-    // Object.keys(req.body).forEach(function(key){
-    //     req.body = JSON.parse(key);
-    // });
-    // var username = req.body.username;
-    // var password = req.body.password;
-    console.log("Inside Login Post Request");
-    //console.log("Req Body : ", username + "password : ",password);
-    console.log("Req Body : ",req.body);
-    var success = false;
-    Users.filter(function(user){
-        if(user.username === req.body.username && user.password === req.body.password){
-            res.cookie('cookie',"admin",{maxAge: 900000, httpOnly: false, path : '/'});
-            req.session.user = user;
-            res.writeHead(200,{
-                'Content-Type' : 'text/plain'
-            })
-            res.end("Successful Login");
-            success = true;
-        }
-    })
-
-    if (!success) {
-        res.writeHead(201, {
-            'Content-Type' : 'text/plain'
-        })
-        res.end("Unsuccessful login");
-    }
-    
-});
-
-//Route to get All Books when user visits the Home Page
-app.get('/home', function(req,res){
-    console.log("Inside Home Login");    
-    res.writeHead(200,{
-        'Content-Type' : 'application/json'
-    });
-    console.log("Books : ",JSON.stringify(books));
-    res.end(JSON.stringify(books));
-    
-})
-
-//Add a book in create page
-app.post('/create', function(req,res){
-    console.log("Inside create");
-    console.log("Req Body : ",req.body);
-    if (req.body.bookid.length == 0 || req.body.title.length == 0 || req.body.author.length == 0) {
-        console.log("Error1");
-        res.writeHead(201, {
-            'Content-Type' : 'text/plain'
-        })
-        res.end("Empty fields");
-    } else if (isNaN(req.body.bookid)) {
-        console.log("Error2");
-        res.writeHead(201, {
-            'Content-Type' : 'text/plain'
-        })
-        res.end("Invalid bookid");
-    }
-    else if (books.some(book => book.BookID == req.body.bookid)) {
-        console.log("Error3");
-        res.writeHead(201, {
-            'Content-Type' : 'text/plain'
-        })
-        res.end("Book ID exists");
-    } else {
-        console.log("Push");
-
-        books.push(
-            { "BookID": req.body.bookid, "Title": req.body.title, "Author": req.body.author },
-        );
-        res.writeHead(200,{
-            'Content-Type' : 'text/plain'
-        })
-        res.end("Successfully added");
-       // res.redirect('/home');
-    }
-})
-
-app.post('/delete', function(req,res){
-    console.log("Inside delete");
-    console.log("Req Body : ",req.body);
-    if (req.body.bookid.length == 0) {
-        console.log("Error1");
-        res.writeHead(201, {
-            'Content-Type' : 'text/plain'
-        })
-        res.end("Empty fields");
-    } else if (isNaN(req.body.bookid)) {
-        console.log("Error2");
-        res.writeHead(201, {
-            'Content-Type' : 'text/plain'
-        })
-        res.end("Invalid bookid");
-    }
-    else if (!books.some(book => book.BookID == req.body.bookid)) {
-        console.log("Error3");
-        res.writeHead(201, {
-            'Content-Type' : 'text/plain'
-        })
-        res.end("Book ID does not exist");
-    } else {
-        console.log("Pop");
-        books = books.filter(book => book.BookID != req.body.bookid);
-        res.writeHead(200,{
-            'Content-Type' : 'text/plain'
-        })
-        res.end("Successfully deleted");
-       // res.redirect('/home');
-    }
-})
 
 
 //start your server on port 3001
