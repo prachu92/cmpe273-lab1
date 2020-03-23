@@ -15,7 +15,7 @@ How to run Handshake backend?
 
 How can I change port, if port 3001 is occupied?
   - Open app.js file in the backend directory
-  - Change '3001' to currently available port number in line 13 (var port = 3001;)
+  - Change '3001' to currently available port number  (var port = 3001;)
   
   ### Handshake - Frontend
 
